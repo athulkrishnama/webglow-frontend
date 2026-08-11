@@ -1,4 +1,4 @@
-import { useMutation, useInfiniteQuery } from '@tanstack/react-query';
+import { useMutation, useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { api } from '../services/api';
 import { API_ROUTES } from '../constants/api.constant';
 import type { ProviderService, PaginatedResponse, ServiceFilters } from '../types/service.types';
@@ -109,6 +109,42 @@ export const useBrowseServices = (filters: ServiceFilters = {}) => {
         return lastPage.page + 1;
       }
       return undefined;
+    },
+  });
+};
+
+export const useGetServiceById = (id: string) => {
+  return useQuery<ProviderService>({
+    queryKey: ['provider-service', id],
+    queryFn: async () => {
+      const response = await api.get<ApiResponse<ProviderService>>(
+        API_ROUTES.PROVIDER_SERVICE.GET_ONE(id),
+      );
+      return response.data.data;
+    },
+    enabled: !!id,
+  });
+};
+
+export interface UpdateProviderServiceData {
+  title?: string;
+  category?: string;
+  pricePerDay?: number;
+  description?: string;
+  location?: LocationData;
+  contact?: string;
+  availability?: AvailabilityData[];
+  isActive?: boolean;
+}
+
+export const useUpdateProviderService = (id: string) => {
+  return useMutation({
+    mutationFn: async (data: UpdateProviderServiceData) => {
+      const response = await api.patch<ApiResponse<ProviderService>>(
+        API_ROUTES.PROVIDER_SERVICE.UPDATE(id),
+        data,
+      );
+      return response.data.data;
     },
   });
 };

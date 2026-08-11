@@ -1,4 +1,4 @@
-import { MapPin, DollarSign, Tag, Calendar } from 'lucide-react';
+import { MapPin, DollarSign, Calendar } from 'lucide-react';
 import type { ProviderService } from '../../types/service.types';
 
 interface ServiceBrowseCardProps {

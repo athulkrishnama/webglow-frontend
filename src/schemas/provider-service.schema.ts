@@ -35,3 +35,7 @@ export const CreateProviderServiceSchema = z.object({
 });
 
 export type CreateProviderServiceFormData = z.infer<typeof CreateProviderServiceSchema>;
+
+export const UpdateProviderServiceSchema = CreateProviderServiceSchema.partial();
+
+export type UpdateProviderServiceFormData = z.infer<typeof UpdateProviderServiceSchema>;

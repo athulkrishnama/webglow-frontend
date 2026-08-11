@@ -1,12 +1,12 @@
 import { useFormContext } from "react-hook-form";
-import type { CreateProviderServiceFormData } from "../../schemas/provider-service.schema";
+import type { UpdateProviderServiceFormData } from "../../schemas/provider-service.schema";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { MapPin } from "lucide-react";
 import { InteractiveMap } from "./interactive-map";
 
 export function LocationSection() {
-  const { register, setValue } = useFormContext<CreateProviderServiceFormData>();
+  const { register, setValue } = useFormContext<UpdateProviderServiceFormData>();
 
   const handleLocationSelect = (location: {
     lat: number;

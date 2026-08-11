@@ -6,7 +6,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   CreateProviderServiceSchema,
-  type CreateProviderServiceFormData,
+  type UpdateProviderServiceFormData,
 } from "../../schemas/provider-service.schema";
 import {
   useCreateProviderService,
@@ -26,7 +26,7 @@ export function CreateServiceForm() {
     isSuccess,
   } = useCreateProviderService();
 
-  const methods = useForm<CreateProviderServiceFormData>({
+  const methods = useForm<UpdateProviderServiceFormData>({
     resolver: zodResolver(CreateProviderServiceSchema),
     defaultValues: {
       title: "",
@@ -46,10 +46,9 @@ export function CreateServiceForm() {
     },
   });
 
-  const onSubmit: SubmitHandler<CreateProviderServiceFormData> = (data) => {
-    // We cast explicitly to the exact type required by the API hook (to avoid 'any')
+  const onSubmit: SubmitHandler<UpdateProviderServiceFormData> = (data) => {
     const serviceData: CreateProviderServiceData = {
-      ...data,
+      ...(data as CreateProviderServiceData),
       availability: data.availability || [],
     };
     createService(serviceData);

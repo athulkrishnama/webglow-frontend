@@ -1,6 +1,6 @@
 
 import { useFormContext, useFieldArray } from "react-hook-form";
-import type { CreateProviderServiceFormData } from "../../schemas/provider-service.schema";
+import type { UpdateProviderServiceFormData } from "../../schemas/provider-service.schema";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
@@ -12,7 +12,7 @@ export function AvailabilitySection() {
     register,
     control,
     formState: { errors },
-  } = useFormContext<CreateProviderServiceFormData>();
+  } = useFormContext<UpdateProviderServiceFormData>();
 
   const { fields, append, remove } = useFieldArray({
     control,

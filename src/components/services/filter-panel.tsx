@@ -1,8 +1,18 @@
-import { useState } from 'react';
-import { SlidersHorizontal, X, Search } from 'lucide-react';
-import { LocationSearchInput } from './location-search-input';
-import { PROVIDER_CATEGORIES } from '../../constants/provider-categories.constant';
-import type { ServiceFilters } from '../../types/service.types';
+import { useState } from "react";
+import {
+  SlidersHorizontal,
+  X,
+  Search,
+  Calendar as CalendarIcon,
+} from "lucide-react";
+import { format, parse } from "date-fns";
+import { cn } from "../../lib/utils";
+import { Button } from "../ui/button";
+import { Calendar } from "../ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { LocationSearchInput } from "./location-search-input";
+import { PROVIDER_CATEGORIES } from "../../constants/provider-categories.constant";
+import type { ServiceFilters } from "../../types/service.types";
 
 interface FilterPanelProps {
   filters: ServiceFilters;
@@ -10,25 +20,35 @@ interface FilterPanelProps {
 }
 
 export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
-  const [locationLabel, setLocationLabel] = useState('');
+  const [locationLabel, setLocationLabel] = useState("");
 
-  const handleChange = (key: keyof ServiceFilters, value: string | number | undefined) => {
+  const handleChange = (
+    key: keyof ServiceFilters,
+    value: string | number | undefined,
+  ) => {
     onFiltersChange({ ...filters, [key]: value });
   };
 
-  const handleLocationSelect = (lat: number, lng: number, displayName: string) => {
+  const handleLocationSelect = (
+    lat: number,
+    lng: number,
+    displayName: string,
+  ) => {
     setLocationLabel(displayName);
     onFiltersChange({ ...filters, lat, lng });
   };
 
   const handleLocationClear = () => {
-    setLocationLabel('');
-    const { lat: _lat, lng: _lng, ...rest } = filters;
-    onFiltersChange({ ...rest, radiusKm: undefined });
+    setLocationLabel("");
+    const rest = { ...filters };
+    delete rest.lat;
+    delete rest.lng;
+    delete rest.radiusKm;
+    onFiltersChange(rest);
   };
 
   const handleReset = () => {
-    setLocationLabel('');
+    setLocationLabel("");
     onFiltersChange({});
   };
 
@@ -71,8 +91,10 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
             id="filter-search"
             type="text"
             placeholder="Search title or description..."
-            value={filters.search ?? ''}
-            onChange={(e) => handleChange('search', e.target.value || undefined)}
+            value={filters.search ?? ""}
+            onChange={(e) =>
+              handleChange("search", e.target.value || undefined)
+            }
             className="w-full h-10 pl-9 pr-3 rounded-lg bg-background border border-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/40 transition-all"
           />
         </div>
@@ -85,8 +107,10 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
         </label>
         <select
           id="filter-category"
-          value={filters.category ?? ''}
-          onChange={(e) => handleChange('category', e.target.value || undefined)}
+          value={filters.category ?? ""}
+          onChange={(e) =>
+            handleChange("category", e.target.value || undefined)
+          }
           className="w-full h-10 px-3 rounded-lg bg-background border border-border text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/40 transition-all"
         >
           <option value="">All Categories</option>
@@ -109,9 +133,12 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
             type="number"
             min={0}
             placeholder="Min"
-            value={filters.minPrice ?? ''}
+            value={filters.minPrice ?? ""}
             onChange={(e) =>
-              handleChange('minPrice', e.target.value ? Number(e.target.value) : undefined)
+              handleChange(
+                "minPrice",
+                e.target.value ? Number(e.target.value) : undefined,
+              )
             }
             className="w-full h-10 px-3 rounded-lg bg-background border border-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/40 transition-all"
           />
@@ -120,9 +147,12 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
             type="number"
             min={0}
             placeholder="Max"
-            value={filters.maxPrice ?? ''}
+            value={filters.maxPrice ?? ""}
             onChange={(e) =>
-              handleChange('maxPrice', e.target.value ? Number(e.target.value) : undefined)
+              handleChange(
+                "maxPrice",
+                e.target.value ? Number(e.target.value) : undefined,
+              )
             }
             className="w-full h-10 px-3 rounded-lg bg-background border border-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/40 transition-all"
           />
@@ -148,9 +178,12 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
               min={1}
               max={500}
               placeholder="50"
-              value={filters.radiusKm ?? ''}
+              value={filters.radiusKm ?? ""}
               onChange={(e) =>
-                handleChange('radiusKm', e.target.value ? Number(e.target.value) : undefined)
+                handleChange(
+                  "radiusKm",
+                  e.target.value ? Number(e.target.value) : undefined,
+                )
               }
               className="w-full h-10 px-3 rounded-lg bg-background border border-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/40 transition-all"
             />
@@ -165,24 +198,92 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
         </label>
         <div className="space-y-2">
           <div>
-            <label className="text-xs text-muted-foreground mb-1 block">From</label>
-            <input
-              id="filter-available-from"
-              type="date"
-              value={filters.availableFrom ?? ''}
-              onChange={(e) => handleChange('availableFrom', e.target.value || undefined)}
-              className="w-full h-10 px-3 rounded-lg bg-background border border-border text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/40 transition-all [color-scheme:dark]"
-            />
+            <label className="text-xs text-muted-foreground mb-1 block">
+              From
+            </label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  id="filter-available-from"
+                  variant={"outline"}
+                  className={cn(
+                    "w-full h-10 px-3 justify-start text-left font-normal rounded-lg bg-background border border-border text-sm",
+                    !filters.availableFrom && "text-muted-foreground",
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {filters.availableFrom ? (
+                    format(
+                      parse(filters.availableFrom, "yyyy-MM-dd", new Date()),
+                      "PPP",
+                    )
+                  ) : (
+                    <span>Pick a date</span>
+                  )}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0">
+                <Calendar
+                  mode="single"
+                  selected={
+                    filters.availableFrom
+                      ? parse(filters.availableFrom, "yyyy-MM-dd", new Date())
+                      : undefined
+                  }
+                  onSelect={(date) =>
+                    handleChange(
+                      "availableFrom",
+                      date ? format(date, "yyyy-MM-dd") : undefined,
+                    )
+                  }
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
           </div>
           <div>
-            <label className="text-xs text-muted-foreground mb-1 block">To</label>
-            <input
-              id="filter-available-to"
-              type="date"
-              value={filters.availableTo ?? ''}
-              onChange={(e) => handleChange('availableTo', e.target.value || undefined)}
-              className="w-full h-10 px-3 rounded-lg bg-background border border-border text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/40 transition-all [color-scheme:dark]"
-            />
+            <label className="text-xs text-muted-foreground mb-1 block">
+              To
+            </label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  id="filter-available-to"
+                  variant={"outline"}
+                  className={cn(
+                    "w-full h-10 px-3 justify-start text-left font-normal rounded-lg bg-background border border-border text-sm",
+                    !filters.availableTo && "text-muted-foreground",
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {filters.availableTo ? (
+                    format(
+                      parse(filters.availableTo, "yyyy-MM-dd", new Date()),
+                      "PPP",
+                    )
+                  ) : (
+                    <span>Pick a date</span>
+                  )}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0">
+                <Calendar
+                  mode="single"
+                  selected={
+                    filters.availableTo
+                      ? parse(filters.availableTo, "yyyy-MM-dd", new Date())
+                      : undefined
+                  }
+                  onSelect={(date) =>
+                    handleChange(
+                      "availableTo",
+                      date ? format(date, "yyyy-MM-dd") : undefined,
+                    )
+                  }
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
       </div>

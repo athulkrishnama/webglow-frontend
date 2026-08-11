@@ -23,6 +23,7 @@ import { Route as ProviderIndexRouteImport } from './routes/provider/index'
 import { Route as SignupProviderRouteImport } from './routes/signup_.provider'
 import { Route as ProviderServicesIndexRouteImport } from './routes/provider/services/index'
 import { Route as ProviderServicesNewRouteImport } from './routes/provider/services/new'
+import { Route as ProviderServicesServiceIdEditRouteImport } from './routes/provider/services/$serviceId/edit'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -94,6 +95,12 @@ const ProviderServicesNewRoute = ProviderServicesNewRouteImport.update({
   path: '/services/new',
   getParentRoute: () => ProviderRoute,
 } as any)
+const ProviderServicesServiceIdEditRoute =
+  ProviderServicesServiceIdEditRouteImport.update({
+    id: '/services/$serviceId/edit',
+    path: '/services/$serviceId/edit',
+    getParentRoute: () => ProviderRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -110,6 +117,7 @@ export interface FileRoutesByFullPath {
   '/provider/': typeof ProviderIndexRoute
   '/provider/services/new': typeof ProviderServicesNewRoute
   '/provider/services/': typeof ProviderServicesIndexRoute
+  '/provider/services/$serviceId/edit': typeof ProviderServicesServiceIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -124,6 +132,7 @@ export interface FileRoutesByTo {
   '/provider': typeof ProviderIndexRoute
   '/provider/services/new': typeof ProviderServicesNewRoute
   '/provider/services': typeof ProviderServicesIndexRoute
+  '/provider/services/$serviceId/edit': typeof ProviderServicesServiceIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -141,6 +150,7 @@ export interface FileRoutesById {
   '/provider/': typeof ProviderIndexRoute
   '/provider/services/new': typeof ProviderServicesNewRoute
   '/provider/services/': typeof ProviderServicesIndexRoute
+  '/provider/services/$serviceId/edit': typeof ProviderServicesServiceIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -159,6 +169,7 @@ export interface FileRouteTypes {
     | '/provider/'
     | '/provider/services/new'
     | '/provider/services/'
+    | '/provider/services/$serviceId/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -173,6 +184,7 @@ export interface FileRouteTypes {
     | '/provider'
     | '/provider/services/new'
     | '/provider/services'
+    | '/provider/services/$serviceId/edit'
   id:
     | '__root__'
     | '/'
@@ -189,6 +201,7 @@ export interface FileRouteTypes {
     | '/provider/'
     | '/provider/services/new'
     | '/provider/services/'
+    | '/provider/services/$serviceId/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -303,6 +316,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProviderServicesNewRouteImport
       parentRoute: typeof ProviderRoute
     }
+    '/provider/services/$serviceId/edit': {
+      id: '/provider/services/$serviceId/edit'
+      path: '/services/$serviceId/edit'
+      fullPath: '/provider/services/$serviceId/edit'
+      preLoaderRoute: typeof ProviderServicesServiceIdEditRouteImport
+      parentRoute: typeof ProviderRoute
+    }
   }
 }
 
@@ -322,12 +342,14 @@ interface ProviderRouteChildren {
   ProviderIndexRoute: typeof ProviderIndexRoute
   ProviderServicesNewRoute: typeof ProviderServicesNewRoute
   ProviderServicesIndexRoute: typeof ProviderServicesIndexRoute
+  ProviderServicesServiceIdEditRoute: typeof ProviderServicesServiceIdEditRoute
 }
 
 const ProviderRouteChildren: ProviderRouteChildren = {
   ProviderIndexRoute: ProviderIndexRoute,
   ProviderServicesNewRoute: ProviderServicesNewRoute,
   ProviderServicesIndexRoute: ProviderServicesIndexRoute,
+  ProviderServicesServiceIdEditRoute: ProviderServicesServiceIdEditRoute,
 }
 
 const ProviderRouteWithChildren = ProviderRoute._addFileChildren(

@@ -16,15 +16,17 @@ interface LocationSearchInputProps {
 
 export function LocationSearchInput({ onSelect, onClear, value }: LocationSearchInputProps) {
   const [query, setQuery] = useState(value);
+  const [prevValue, setPrevValue] = useState(value);
   const [results, setResults] = useState<NominatimResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  if (value !== prevValue) {
+    setPrevValue(value);
     setQuery(value);
-  }, [value]);
+  }
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {

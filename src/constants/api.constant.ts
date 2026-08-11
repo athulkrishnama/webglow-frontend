@@ -13,6 +13,8 @@ export const API_ROUTES = {
     MY_SERVICES: '/provider-service/my',
     ADMIN_SERVICES: '/provider-service/admin',
     BROWSE: '/provider-service/browse',
+    GET_ONE: (id: string) => `/provider-service/${id}`,
+    UPDATE: (id: string) => `/provider-service/${id}`,
   },
 };
 

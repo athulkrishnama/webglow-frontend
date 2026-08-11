@@ -1,6 +1,6 @@
 
 import { useFormContext } from "react-hook-form";
-import type { CreateProviderServiceFormData } from "../../schemas/provider-service.schema";
+import type { UpdateProviderServiceFormData } from "../../schemas/provider-service.schema";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { PROVIDER_CATEGORIES } from "../../constants/provider-categories.constant";
@@ -9,7 +9,7 @@ export function GeneralInfoSection() {
   const {
     register,
     formState: { errors },
-  } = useFormContext<CreateProviderServiceFormData>();
+  } = useFormContext<UpdateProviderServiceFormData>();
 
   return (
     <div className="space-y-6">
