@@ -10,6 +10,9 @@ export const API_ROUTES = {
   PROVIDER_SERVICE: {
     BASE: 'provider-service',
     CREATE: '/provider-service',
+    MY_SERVICES: '/provider-service/my',
+    ADMIN_SERVICES: '/provider-service/admin',
+    BROWSE: '/provider-service/browse',
   },
 };
 

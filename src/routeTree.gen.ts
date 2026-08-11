@@ -10,18 +10,28 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ProviderRouteImport } from './routes/provider'
+import { Route as ServicesRouteImport } from './routes/services'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AdminServicesRouteImport } from './routes/admin/services'
 import { Route as LoginAdminRouteImport } from './routes/login_.admin'
 import { Route as LoginProviderRouteImport } from './routes/login_.provider'
 import { Route as ProviderIndexRouteImport } from './routes/provider/index'
 import { Route as SignupProviderRouteImport } from './routes/signup_.provider'
+import { Route as ProviderServicesIndexRouteImport } from './routes/provider/services/index'
 import { Route as ProviderServicesNewRouteImport } from './routes/provider/services/new'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -34,10 +44,25 @@ const ProviderRoute = ProviderRouteImport.update({
   path: '/provider',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ServicesRoute = ServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminServicesRoute = AdminServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
+  getParentRoute: () => AdminRoute,
 } as any)
 const LoginAdminRoute = LoginAdminRouteImport.update({
   id: '/login_/admin',
@@ -59,6 +84,11 @@ const SignupProviderRoute = SignupProviderRouteImport.update({
   path: '/signup/provider',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProviderServicesIndexRoute = ProviderServicesIndexRouteImport.update({
+  id: '/services/',
+  path: '/services/',
+  getParentRoute: () => ProviderRoute,
+} as any)
 const ProviderServicesNewRoute = ProviderServicesNewRouteImport.update({
   id: '/services/new',
   path: '/services/new',
@@ -67,76 +97,106 @@ const ProviderServicesNewRoute = ProviderServicesNewRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/login': typeof LoginRoute
   '/provider': typeof ProviderRouteWithChildren
+  '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
+  '/admin/services': typeof AdminServicesRoute
   '/login/admin': typeof LoginAdminRoute
   '/login/provider': typeof LoginProviderRoute
   '/signup/provider': typeof SignupProviderRoute
+  '/admin/': typeof AdminIndexRoute
   '/provider/': typeof ProviderIndexRoute
   '/provider/services/new': typeof ProviderServicesNewRoute
+  '/provider/services/': typeof ProviderServicesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
+  '/admin/services': typeof AdminServicesRoute
   '/login/admin': typeof LoginAdminRoute
   '/login/provider': typeof LoginProviderRoute
   '/signup/provider': typeof SignupProviderRoute
+  '/admin': typeof AdminIndexRoute
   '/provider': typeof ProviderIndexRoute
   '/provider/services/new': typeof ProviderServicesNewRoute
+  '/provider/services': typeof ProviderServicesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/login': typeof LoginRoute
   '/provider': typeof ProviderRouteWithChildren
+  '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
+  '/admin/services': typeof AdminServicesRoute
   '/login_/admin': typeof LoginAdminRoute
   '/login_/provider': typeof LoginProviderRoute
   '/signup_/provider': typeof SignupProviderRoute
+  '/admin/': typeof AdminIndexRoute
   '/provider/': typeof ProviderIndexRoute
   '/provider/services/new': typeof ProviderServicesNewRoute
+  '/provider/services/': typeof ProviderServicesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/login'
     | '/provider'
+    | '/services'
     | '/signup'
+    | '/admin/services'
     | '/login/admin'
     | '/login/provider'
     | '/signup/provider'
+    | '/admin/'
     | '/provider/'
     | '/provider/services/new'
+    | '/provider/services/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/login'
+    | '/services'
     | '/signup'
+    | '/admin/services'
     | '/login/admin'
     | '/login/provider'
     | '/signup/provider'
+    | '/admin'
     | '/provider'
     | '/provider/services/new'
+    | '/provider/services'
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/login'
     | '/provider'
+    | '/services'
     | '/signup'
+    | '/admin/services'
     | '/login_/admin'
     | '/login_/provider'
     | '/signup_/provider'
+    | '/admin/'
     | '/provider/'
     | '/provider/services/new'
+    | '/provider/services/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
   LoginRoute: typeof LoginRoute
   ProviderRoute: typeof ProviderRouteWithChildren
+  ServicesRoute: typeof ServicesRoute
   SignupRoute: typeof SignupRoute
   LoginAdminRoute: typeof LoginAdminRoute
   LoginProviderRoute: typeof LoginProviderRoute
@@ -150,6 +210,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -166,12 +233,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProviderRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/services': {
+      id: '/services'
+      path: '/services'
+      fullPath: '/services'
+      preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/signup': {
       id: '/signup'
       path: '/signup'
       fullPath: '/signup'
       preLoaderRoute: typeof SignupRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/services': {
+      id: '/admin/services'
+      path: '/services'
+      fullPath: '/admin/services'
+      preLoaderRoute: typeof AdminServicesRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/login_/admin': {
       id: '/login_/admin'
@@ -201,6 +289,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignupProviderRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/provider/services/': {
+      id: '/provider/services/'
+      path: '/services'
+      fullPath: '/provider/services/'
+      preLoaderRoute: typeof ProviderServicesIndexRouteImport
+      parentRoute: typeof ProviderRoute
+    }
     '/provider/services/new': {
       id: '/provider/services/new'
       path: '/services/new'
@@ -211,14 +306,28 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminRouteChildren {
+  AdminServicesRoute: typeof AdminServicesRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminServicesRoute: AdminServicesRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 interface ProviderRouteChildren {
   ProviderIndexRoute: typeof ProviderIndexRoute
   ProviderServicesNewRoute: typeof ProviderServicesNewRoute
+  ProviderServicesIndexRoute: typeof ProviderServicesIndexRoute
 }
 
 const ProviderRouteChildren: ProviderRouteChildren = {
   ProviderIndexRoute: ProviderIndexRoute,
   ProviderServicesNewRoute: ProviderServicesNewRoute,
+  ProviderServicesIndexRoute: ProviderServicesIndexRoute,
 }
 
 const ProviderRouteWithChildren = ProviderRoute._addFileChildren(
@@ -227,8 +336,10 @@ const ProviderRouteWithChildren = ProviderRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
   LoginRoute: LoginRoute,
   ProviderRoute: ProviderRouteWithChildren,
+  ServicesRoute: ServicesRoute,
   SignupRoute: SignupRoute,
   LoginAdminRoute: LoginAdminRoute,
   LoginProviderRoute: LoginProviderRoute,

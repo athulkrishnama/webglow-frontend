@@ -13,7 +13,7 @@ export function ProviderLayoutPage() {
           </div>
           <nav className="flex items-center gap-6 text-sm font-medium">
             <a href="/provider" className="text-muted-foreground hover:text-foreground transition-colors">Overview</a>
-            <a href="/provider/services/new" className="text-muted-foreground hover:text-foreground transition-colors">Services</a>
+            <a href="/provider/services" className="text-muted-foreground hover:text-foreground transition-colors">Services</a>
             <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Bookings</a>
           </nav>
         </div>
