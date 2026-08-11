@@ -46,15 +46,16 @@ export function EditServiceForm({ serviceId }: EditServiceFormProps) {
   } = useUpdateProviderService(serviceId);
 
   const methods = useForm<UpdateProviderServiceFormData>({
-    resolver: zodResolver(UpdateProviderServiceSchema),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resolver: zodResolver(UpdateProviderServiceSchema) as any,
     defaultValues: {
       title: '',
-      category: '',
+      category: undefined,
       pricePerDay: 0,
       description: '',
       isActive: true,
       location: {
-        type: 'Point',
+        type: 'Point' as const,
         coordinates: [0, 0],
         address: '',
         city: '',
@@ -70,13 +71,14 @@ export function EditServiceForm({ serviceId }: EditServiceFormProps) {
 
     methods.reset({
       title: service.title,
-      category: service.category,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      category: service.category as any,
       pricePerDay: service.pricePerDay,
       description: service.description,
       contact: service.contact ?? '',
       isActive: service.isActive,
       location: {
-        type: service.location.type ?? 'Point',
+        type: (service.location.type ?? 'Point') as 'Point',
         coordinates: service.location.coordinates as [number, number],
         address: service.location.address ?? '',
         city: service.location.city ?? '',

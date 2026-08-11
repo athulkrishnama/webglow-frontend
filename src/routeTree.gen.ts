@@ -11,15 +11,18 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as BookingsRouteImport } from './routes/bookings'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ProviderRouteImport } from './routes/provider'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AdminBookingsRouteImport } from './routes/admin/bookings'
 import { Route as AdminServicesRouteImport } from './routes/admin/services'
 import { Route as LoginAdminRouteImport } from './routes/login_.admin'
 import { Route as LoginProviderRouteImport } from './routes/login_.provider'
 import { Route as ProviderIndexRouteImport } from './routes/provider/index'
+import { Route as ProviderBookingsRouteImport } from './routes/provider/bookings'
 import { Route as ServicesServiceIdRouteImport } from './routes/services_.$serviceId'
 import { Route as SignupProviderRouteImport } from './routes/signup_.provider'
 import { Route as ProviderServicesIndexRouteImport } from './routes/provider/services/index'
@@ -34,6 +37,11 @@ const IndexRoute = IndexRouteImport.update({
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BookingsRoute = BookingsRouteImport.update({
+  id: '/bookings',
+  path: '/bookings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -61,6 +69,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminBookingsRoute = AdminBookingsRouteImport.update({
+  id: '/bookings',
+  path: '/bookings',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminServicesRoute = AdminServicesRouteImport.update({
   id: '/services',
   path: '/services',
@@ -79,6 +92,11 @@ const LoginProviderRoute = LoginProviderRouteImport.update({
 const ProviderIndexRoute = ProviderIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => ProviderRoute,
+} as any)
+const ProviderBookingsRoute = ProviderBookingsRouteImport.update({
+  id: '/bookings',
+  path: '/bookings',
   getParentRoute: () => ProviderRoute,
 } as any)
 const ServicesServiceIdRoute = ServicesServiceIdRouteImport.update({
@@ -111,13 +129,16 @@ const ProviderServicesServiceIdEditRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/bookings': typeof BookingsRoute
   '/login': typeof LoginRoute
   '/provider': typeof ProviderRouteWithChildren
   '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
+  '/admin/bookings': typeof AdminBookingsRoute
   '/admin/services': typeof AdminServicesRoute
   '/login/admin': typeof LoginAdminRoute
   '/login/provider': typeof LoginProviderRoute
+  '/provider/bookings': typeof ProviderBookingsRoute
   '/services/$serviceId': typeof ServicesServiceIdRoute
   '/signup/provider': typeof SignupProviderRoute
   '/admin/': typeof AdminIndexRoute
@@ -128,12 +149,15 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/bookings': typeof BookingsRoute
   '/login': typeof LoginRoute
   '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
+  '/admin/bookings': typeof AdminBookingsRoute
   '/admin/services': typeof AdminServicesRoute
   '/login/admin': typeof LoginAdminRoute
   '/login/provider': typeof LoginProviderRoute
+  '/provider/bookings': typeof ProviderBookingsRoute
   '/services/$serviceId': typeof ServicesServiceIdRoute
   '/signup/provider': typeof SignupProviderRoute
   '/admin': typeof AdminIndexRoute
@@ -146,13 +170,16 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/bookings': typeof BookingsRoute
   '/login': typeof LoginRoute
   '/provider': typeof ProviderRouteWithChildren
   '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
+  '/admin/bookings': typeof AdminBookingsRoute
   '/admin/services': typeof AdminServicesRoute
   '/login_/admin': typeof LoginAdminRoute
   '/login_/provider': typeof LoginProviderRoute
+  '/provider/bookings': typeof ProviderBookingsRoute
   '/services_/$serviceId': typeof ServicesServiceIdRoute
   '/signup_/provider': typeof SignupProviderRoute
   '/admin/': typeof AdminIndexRoute
@@ -166,13 +193,16 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin'
+    | '/bookings'
     | '/login'
     | '/provider'
     | '/services'
     | '/signup'
+    | '/admin/bookings'
     | '/admin/services'
     | '/login/admin'
     | '/login/provider'
+    | '/provider/bookings'
     | '/services/$serviceId'
     | '/signup/provider'
     | '/admin/'
@@ -183,12 +213,15 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/bookings'
     | '/login'
     | '/services'
     | '/signup'
+    | '/admin/bookings'
     | '/admin/services'
     | '/login/admin'
     | '/login/provider'
+    | '/provider/bookings'
     | '/services/$serviceId'
     | '/signup/provider'
     | '/admin'
@@ -200,13 +233,16 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/admin'
+    | '/bookings'
     | '/login'
     | '/provider'
     | '/services'
     | '/signup'
+    | '/admin/bookings'
     | '/admin/services'
     | '/login_/admin'
     | '/login_/provider'
+    | '/provider/bookings'
     | '/services_/$serviceId'
     | '/signup_/provider'
     | '/admin/'
@@ -219,6 +255,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
+  BookingsRoute: typeof BookingsRoute
   LoginRoute: typeof LoginRoute
   ProviderRoute: typeof ProviderRouteWithChildren
   ServicesRoute: typeof ServicesRoute
@@ -243,6 +280,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bookings': {
+      id: '/bookings'
+      path: '/bookings'
+      fullPath: '/bookings'
+      preLoaderRoute: typeof BookingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -280,6 +324,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/bookings': {
+      id: '/admin/bookings'
+      path: '/bookings'
+      fullPath: '/admin/bookings'
+      preLoaderRoute: typeof AdminBookingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/services': {
       id: '/admin/services'
       path: '/services'
@@ -306,6 +357,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/provider/'
       preLoaderRoute: typeof ProviderIndexRouteImport
+      parentRoute: typeof ProviderRoute
+    }
+    '/provider/bookings': {
+      id: '/provider/bookings'
+      path: '/bookings'
+      fullPath: '/provider/bookings'
+      preLoaderRoute: typeof ProviderBookingsRouteImport
       parentRoute: typeof ProviderRoute
     }
     '/services_/$serviceId': {
@@ -347,11 +405,13 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminBookingsRoute: typeof AdminBookingsRoute
   AdminServicesRoute: typeof AdminServicesRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminBookingsRoute: AdminBookingsRoute,
   AdminServicesRoute: AdminServicesRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
@@ -359,6 +419,7 @@ const AdminRouteChildren: AdminRouteChildren = {
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface ProviderRouteChildren {
+  ProviderBookingsRoute: typeof ProviderBookingsRoute
   ProviderIndexRoute: typeof ProviderIndexRoute
   ProviderServicesNewRoute: typeof ProviderServicesNewRoute
   ProviderServicesIndexRoute: typeof ProviderServicesIndexRoute
@@ -366,6 +427,7 @@ interface ProviderRouteChildren {
 }
 
 const ProviderRouteChildren: ProviderRouteChildren = {
+  ProviderBookingsRoute: ProviderBookingsRoute,
   ProviderIndexRoute: ProviderIndexRoute,
   ProviderServicesNewRoute: ProviderServicesNewRoute,
   ProviderServicesIndexRoute: ProviderServicesIndexRoute,
@@ -379,6 +441,7 @@ const ProviderRouteWithChildren = ProviderRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
+  BookingsRoute: BookingsRoute,
   LoginRoute: LoginRoute,
   ProviderRoute: ProviderRouteWithChildren,
   ServicesRoute: ServicesRoute,

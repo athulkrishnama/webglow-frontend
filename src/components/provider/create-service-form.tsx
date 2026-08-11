@@ -6,7 +6,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   CreateProviderServiceSchema,
-  type UpdateProviderServiceFormData,
+  type CreateProviderServiceFormData,
 } from "../../schemas/provider-service.schema";
 import {
   useCreateProviderService,
@@ -26,17 +26,18 @@ export function CreateServiceForm() {
     isSuccess,
   } = useCreateProviderService();
 
-  const methods = useForm<UpdateProviderServiceFormData>({
-    resolver: zodResolver(CreateProviderServiceSchema),
+  const methods = useForm<CreateProviderServiceFormData>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resolver: zodResolver(CreateProviderServiceSchema) as any,
     defaultValues: {
       title: "",
-      category: "",
+      category: undefined,
       pricePerDay: 0,
       description: "",
       isActive: true,
       location: {
         type: "Point",
-        coordinates: [0, 0], // Default coordinates, would typically be fetched via Geolocation or Map API
+        coordinates: [0, 0],
         address: "",
         city: "",
         state: "",
@@ -46,7 +47,7 @@ export function CreateServiceForm() {
     },
   });
 
-  const onSubmit: SubmitHandler<UpdateProviderServiceFormData> = (data) => {
+  const onSubmit: SubmitHandler<CreateProviderServiceFormData> = (data) => {
     const serviceData: CreateProviderServiceData = {
       ...(data as CreateProviderServiceData),
       availability: data.availability || [],

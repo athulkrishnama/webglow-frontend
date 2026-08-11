@@ -1,5 +1,5 @@
 import { Outlet, Link } from '@tanstack/react-router';
-import { LayoutDashboard, List, LogOut } from 'lucide-react';
+import { List, LogOut } from 'lucide-react';
 import { useDispatch } from 'react-redux';
 import { logout } from '../store/slices/auth.slice';
 import { clearToken } from '../store/slices/token.slice';
@@ -25,19 +25,20 @@ export function AdminLayoutPage() {
           </div>
 
           <nav className="flex items-center gap-6 text-sm font-medium">
-            <Link
-              to="/admin"
-              className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors [&.active]:text-foreground"
-            >
-              <LayoutDashboard className="w-4 h-4" />
-              Dashboard
-            </Link>
+
             <Link
               to="/admin/services"
               className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors [&.active]:text-foreground"
             >
               <List className="w-4 h-4" />
               Services
+            </Link>
+            <Link
+              to="/admin/bookings"
+              className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors [&.active]:text-foreground"
+            >
+              <List className="w-4 h-4" />
+              Bookings
             </Link>
             <button
               id="admin-logout-btn"

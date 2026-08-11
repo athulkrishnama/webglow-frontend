@@ -6,9 +6,10 @@ import type { ProviderService } from "../../types/service.types";
 
 interface ServiceCardProps {
   service: ProviderService;
+  readOnly?: boolean;
 }
 
-export function ServiceCard({ service }: ServiceCardProps) {
+export function ServiceCard({ service, readOnly = false }: ServiceCardProps) {
   const isAvailable = service.availability.length > 0;
 
   return (
@@ -65,14 +66,16 @@ export function ServiceCard({ service }: ServiceCardProps) {
       </div>
 
       {/* Footer */}
-      <div className="mt-2 pt-4 border-t border-border flex justify-end">
-        <Link to="/provider/services/$serviceId/edit" params={{ serviceId: service._id }}>
-          <Button variant="outline" size="sm" className="h-8">
-            <Edit2 className="w-3.5 h-3.5 mr-2" />
-            Edit Service
-          </Button>
-        </Link>
-      </div>
+      {!readOnly && (
+        <div className="mt-2 pt-4 border-t border-border flex justify-end">
+          <Link to="/provider/services/$serviceId/edit" params={{ serviceId: service._id }}>
+            <Button variant="outline" size="sm" className="h-8">
+              <Edit2 className="w-3.5 h-3.5 mr-2" />
+              Edit Service
+            </Button>
+          </Link>
+        </div>
+      )}
     </Card>
   );
 }

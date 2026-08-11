@@ -7,7 +7,7 @@ import { routeTree } from './routeTree.gen'
 
 import { isLoggedin, checkRole } from './utils/auth.utils'
 
-const router = createRouter({
+export const router = createRouter({
   routeTree,
   context: { isLoggedin, checkRole },
 })

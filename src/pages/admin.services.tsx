@@ -101,7 +101,7 @@ export function AdminServicesPage() {
       {services.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {services.map((service) => (
-            <ServiceCard key={service._id} service={service} />
+            <ServiceCard key={service._id} service={service} readOnly={true} />
           ))}
         </div>
       )}

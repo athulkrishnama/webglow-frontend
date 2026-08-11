@@ -1,6 +1,18 @@
-import { Outlet } from '@tanstack/react-router';
+import { Outlet, Link } from '@tanstack/react-router';
+import { LayoutDashboard, List, Calendar, LogOut } from 'lucide-react';
+import { useDispatch } from 'react-redux';
+import { logout } from '../store/slices/auth.slice';
+import { clearToken } from '../store/slices/token.slice';
 
 export function ProviderLayoutPage() {
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    dispatch(clearToken());
+    window.location.href = '/login/provider';
+  };
+
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
       <header className="border-b border-border bg-background/80 backdrop-blur-md sticky top-0 z-50">
@@ -12,9 +24,34 @@ export function ProviderLayoutPage() {
             <span className="font-semibold text-lg tracking-tight">Provider Dashboard</span>
           </div>
           <nav className="flex items-center gap-6 text-sm font-medium">
-            <a href="/provider" className="text-muted-foreground hover:text-foreground transition-colors">Overview</a>
-            <a href="/provider/services" className="text-muted-foreground hover:text-foreground transition-colors">Services</a>
-            <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Bookings</a>
+            <Link
+              to="/provider"
+              className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors [&.active]:text-foreground"
+            >
+              <LayoutDashboard className="w-4 h-4" />
+              Overview
+            </Link>
+            <Link
+              to="/provider/services"
+              className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors [&.active]:text-foreground"
+            >
+              <List className="w-4 h-4" />
+              Services
+            </Link>
+            <Link
+              to="/provider/bookings"
+              className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors [&.active]:text-foreground"
+            >
+              <Calendar className="w-4 h-4" />
+              Bookings
+            </Link>
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-1.5 text-muted-foreground hover:text-rose-400 transition-colors text-sm font-medium"
+            >
+              <LogOut className="w-4 h-4" />
+              Logout
+            </button>
           </nav>
         </div>
       </header>
@@ -25,3 +62,4 @@ export function ProviderLayoutPage() {
     </div>
   );
 }
+
