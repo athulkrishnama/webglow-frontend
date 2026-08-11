@@ -202,6 +202,7 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
               From
             </label>
             <Popover>
+              {/* @ts-expect-error asChild type issue */}
               <PopoverTrigger asChild>
                 <Button
                   id="filter-available-from"
@@ -236,7 +237,6 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
                       date ? format(date, "yyyy-MM-dd") : undefined,
                     )
                   }
-                  initialFocus
                 />
               </PopoverContent>
             </Popover>
@@ -246,6 +246,7 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
               To
             </label>
             <Popover>
+              {/* @ts-expect-error asChild type issue */}
               <PopoverTrigger asChild>
                 <Button
                   id="filter-available-to"
@@ -280,7 +281,6 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
                       date ? format(date, "yyyy-MM-dd") : undefined,
                     )
                   }
-                  initialFocus
                 />
               </PopoverContent>
             </Popover>

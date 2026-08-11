@@ -20,6 +20,7 @@ import { Route as AdminServicesRouteImport } from './routes/admin/services'
 import { Route as LoginAdminRouteImport } from './routes/login_.admin'
 import { Route as LoginProviderRouteImport } from './routes/login_.provider'
 import { Route as ProviderIndexRouteImport } from './routes/provider/index'
+import { Route as ServicesServiceIdRouteImport } from './routes/services_.$serviceId'
 import { Route as SignupProviderRouteImport } from './routes/signup_.provider'
 import { Route as ProviderServicesIndexRouteImport } from './routes/provider/services/index'
 import { Route as ProviderServicesNewRouteImport } from './routes/provider/services/new'
@@ -80,6 +81,11 @@ const ProviderIndexRoute = ProviderIndexRouteImport.update({
   path: '/',
   getParentRoute: () => ProviderRoute,
 } as any)
+const ServicesServiceIdRoute = ServicesServiceIdRouteImport.update({
+  id: '/services_/$serviceId',
+  path: '/services/$serviceId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SignupProviderRoute = SignupProviderRouteImport.update({
   id: '/signup_/provider',
   path: '/signup/provider',
@@ -112,6 +118,7 @@ export interface FileRoutesByFullPath {
   '/admin/services': typeof AdminServicesRoute
   '/login/admin': typeof LoginAdminRoute
   '/login/provider': typeof LoginProviderRoute
+  '/services/$serviceId': typeof ServicesServiceIdRoute
   '/signup/provider': typeof SignupProviderRoute
   '/admin/': typeof AdminIndexRoute
   '/provider/': typeof ProviderIndexRoute
@@ -127,6 +134,7 @@ export interface FileRoutesByTo {
   '/admin/services': typeof AdminServicesRoute
   '/login/admin': typeof LoginAdminRoute
   '/login/provider': typeof LoginProviderRoute
+  '/services/$serviceId': typeof ServicesServiceIdRoute
   '/signup/provider': typeof SignupProviderRoute
   '/admin': typeof AdminIndexRoute
   '/provider': typeof ProviderIndexRoute
@@ -145,6 +153,7 @@ export interface FileRoutesById {
   '/admin/services': typeof AdminServicesRoute
   '/login_/admin': typeof LoginAdminRoute
   '/login_/provider': typeof LoginProviderRoute
+  '/services_/$serviceId': typeof ServicesServiceIdRoute
   '/signup_/provider': typeof SignupProviderRoute
   '/admin/': typeof AdminIndexRoute
   '/provider/': typeof ProviderIndexRoute
@@ -164,6 +173,7 @@ export interface FileRouteTypes {
     | '/admin/services'
     | '/login/admin'
     | '/login/provider'
+    | '/services/$serviceId'
     | '/signup/provider'
     | '/admin/'
     | '/provider/'
@@ -179,6 +189,7 @@ export interface FileRouteTypes {
     | '/admin/services'
     | '/login/admin'
     | '/login/provider'
+    | '/services/$serviceId'
     | '/signup/provider'
     | '/admin'
     | '/provider'
@@ -196,6 +207,7 @@ export interface FileRouteTypes {
     | '/admin/services'
     | '/login_/admin'
     | '/login_/provider'
+    | '/services_/$serviceId'
     | '/signup_/provider'
     | '/admin/'
     | '/provider/'
@@ -213,6 +225,7 @@ export interface RootRouteChildren {
   SignupRoute: typeof SignupRoute
   LoginAdminRoute: typeof LoginAdminRoute
   LoginProviderRoute: typeof LoginProviderRoute
+  ServicesServiceIdRoute: typeof ServicesServiceIdRoute
   SignupProviderRoute: typeof SignupProviderRoute
 }
 
@@ -295,6 +308,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProviderIndexRouteImport
       parentRoute: typeof ProviderRoute
     }
+    '/services_/$serviceId': {
+      id: '/services_/$serviceId'
+      path: '/services/$serviceId'
+      fullPath: '/services/$serviceId'
+      preLoaderRoute: typeof ServicesServiceIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/signup_/provider': {
       id: '/signup_/provider'
       path: '/signup/provider'
@@ -365,6 +385,7 @@ const rootRouteChildren: RootRouteChildren = {
   SignupRoute: SignupRoute,
   LoginAdminRoute: LoginAdminRoute,
   LoginProviderRoute: LoginProviderRoute,
+  ServicesServiceIdRoute: ServicesServiceIdRoute,
   SignupProviderRoute: SignupProviderRoute,
 }
 export const routeTree = rootRouteImport

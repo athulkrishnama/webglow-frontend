@@ -126,6 +126,19 @@ export const useGetServiceById = (id: string) => {
   });
 };
 
+export const useGetBrowseServiceById = (id: string) => {
+  return useQuery<ProviderService>({
+    queryKey: ['browse-service', id],
+    queryFn: async () => {
+      const response = await api.get<ApiResponse<ProviderService>>(
+        API_ROUTES.PROVIDER_SERVICE.BROWSE_ONE(id),
+      );
+      return response.data.data;
+    },
+    enabled: !!id,
+  });
+};
+
 export interface UpdateProviderServiceData {
   title?: string;
   category?: string;

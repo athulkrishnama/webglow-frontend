@@ -1,4 +1,5 @@
 import { MapPin, DollarSign, Calendar } from 'lucide-react';
+import { Link } from '@tanstack/react-router';
 import type { ProviderService } from '../../types/service.types';
 
 interface ServiceBrowseCardProps {
@@ -72,11 +73,13 @@ export function ServiceBrowseCard({ service }: ServiceBrowseCardProps) {
         </div>
 
         {/* CTA */}
-        <button
-          className="mt-auto w-full h-9 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-medium hover:bg-blue-500/20 transition-colors"
+        <Link
+          to="/services/$serviceId"
+          params={{ serviceId: service._id }}
+          className="mt-auto flex items-center justify-center w-full h-9 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-medium hover:bg-blue-500/20 transition-colors"
         >
           View Details
-        </button>
+        </Link>
       </div>
     </div>
   );
