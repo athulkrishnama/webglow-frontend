@@ -11,3 +11,13 @@ export const hasRoleAccess = (allowedRoles: ROLES[]): boolean => {
 
   return allowedRoles.includes(user.role);
 };
+
+export const checkRole = (role: ROLES): boolean => {
+  const state = store.getState();
+  return state.auth.user?.role === role;
+};
+
+export const isLoggedin = (): boolean => {
+  const state = store.getState();
+  return state.auth.isAuthenticated && state.token.accessToken !== null;
+};

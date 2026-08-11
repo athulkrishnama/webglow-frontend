@@ -7,6 +7,10 @@ export const API_ROUTES = {
     LOGIN: '/user/login',
     REFRESH_TOKEN: '/user/refresh-token',
   },
+  PROVIDER_SERVICE: {
+    BASE: 'provider-service',
+    CREATE: '/provider-service',
+  },
 };
 
 export const API_BASE_URL = env.VITE_API_URL;

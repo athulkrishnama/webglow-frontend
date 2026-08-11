@@ -5,7 +5,12 @@ import { RouterProvider, createRouter } from '@tanstack/react-router'
 
 import { routeTree } from './routeTree.gen'
 
-const router = createRouter({ routeTree })
+import { isLoggedin, checkRole } from './utils/auth.utils'
+
+const router = createRouter({
+  routeTree,
+  context: { isLoggedin, checkRole },
+})
 
 declare module '@tanstack/react-router' {
   interface Register {

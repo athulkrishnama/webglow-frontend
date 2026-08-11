@@ -11,10 +11,13 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as ProviderRouteImport } from './routes/provider'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as LoginAdminRouteImport } from './routes/login_.admin'
 import { Route as LoginProviderRouteImport } from './routes/login_.provider'
+import { Route as ProviderIndexRouteImport } from './routes/provider/index'
 import { Route as SignupProviderRouteImport } from './routes/signup_.provider'
+import { Route as ProviderServicesNewRouteImport } from './routes/provider/services/new'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -24,6 +27,11 @@ const IndexRoute = IndexRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProviderRoute = ProviderRouteImport.update({
+  id: '/provider',
+  path: '/provider',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SignupRoute = SignupRouteImport.update({
@@ -41,19 +49,32 @@ const LoginProviderRoute = LoginProviderRouteImport.update({
   path: '/login/provider',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProviderIndexRoute = ProviderIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ProviderRoute,
+} as any)
 const SignupProviderRoute = SignupProviderRouteImport.update({
   id: '/signup_/provider',
   path: '/signup/provider',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProviderServicesNewRoute = ProviderServicesNewRouteImport.update({
+  id: '/services/new',
+  path: '/services/new',
+  getParentRoute: () => ProviderRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/provider': typeof ProviderRouteWithChildren
   '/signup': typeof SignupRoute
   '/login/admin': typeof LoginAdminRoute
   '/login/provider': typeof LoginProviderRoute
   '/signup/provider': typeof SignupProviderRoute
+  '/provider/': typeof ProviderIndexRoute
+  '/provider/services/new': typeof ProviderServicesNewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,25 +83,33 @@ export interface FileRoutesByTo {
   '/login/admin': typeof LoginAdminRoute
   '/login/provider': typeof LoginProviderRoute
   '/signup/provider': typeof SignupProviderRoute
+  '/provider': typeof ProviderIndexRoute
+  '/provider/services/new': typeof ProviderServicesNewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/provider': typeof ProviderRouteWithChildren
   '/signup': typeof SignupRoute
   '/login_/admin': typeof LoginAdminRoute
   '/login_/provider': typeof LoginProviderRoute
   '/signup_/provider': typeof SignupProviderRoute
+  '/provider/': typeof ProviderIndexRoute
+  '/provider/services/new': typeof ProviderServicesNewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/login'
+    | '/provider'
     | '/signup'
     | '/login/admin'
     | '/login/provider'
     | '/signup/provider'
+    | '/provider/'
+    | '/provider/services/new'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -89,19 +118,25 @@ export interface FileRouteTypes {
     | '/login/admin'
     | '/login/provider'
     | '/signup/provider'
+    | '/provider'
+    | '/provider/services/new'
   id:
     | '__root__'
     | '/'
     | '/login'
+    | '/provider'
     | '/signup'
     | '/login_/admin'
     | '/login_/provider'
     | '/signup_/provider'
+    | '/provider/'
+    | '/provider/services/new'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LoginRoute: typeof LoginRoute
+  ProviderRoute: typeof ProviderRouteWithChildren
   SignupRoute: typeof SignupRoute
   LoginAdminRoute: typeof LoginAdminRoute
   LoginProviderRoute: typeof LoginProviderRoute
@@ -122,6 +157,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/provider': {
+      id: '/provider'
+      path: '/provider'
+      fullPath: '/provider'
+      preLoaderRoute: typeof ProviderRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/signup': {
@@ -145,6 +187,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginProviderRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/provider/': {
+      id: '/provider/'
+      path: '/'
+      fullPath: '/provider/'
+      preLoaderRoute: typeof ProviderIndexRouteImport
+      parentRoute: typeof ProviderRoute
+    }
     '/signup_/provider': {
       id: '/signup_/provider'
       path: '/signup/provider'
@@ -152,12 +201,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignupProviderRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/provider/services/new': {
+      id: '/provider/services/new'
+      path: '/services/new'
+      fullPath: '/provider/services/new'
+      preLoaderRoute: typeof ProviderServicesNewRouteImport
+      parentRoute: typeof ProviderRoute
+    }
   }
 }
+
+interface ProviderRouteChildren {
+  ProviderIndexRoute: typeof ProviderIndexRoute
+  ProviderServicesNewRoute: typeof ProviderServicesNewRoute
+}
+
+const ProviderRouteChildren: ProviderRouteChildren = {
+  ProviderIndexRoute: ProviderIndexRoute,
+  ProviderServicesNewRoute: ProviderServicesNewRoute,
+}
+
+const ProviderRouteWithChildren = ProviderRoute._addFileChildren(
+  ProviderRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LoginRoute: LoginRoute,
+  ProviderRoute: ProviderRouteWithChildren,
   SignupRoute: SignupRoute,
   LoginAdminRoute: LoginAdminRoute,
   LoginProviderRoute: LoginProviderRoute,

@@ -1,8 +1,17 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 import { useSelector } from 'react-redux'
 import type { RootState } from '../store/store'
+import { ROLES } from '../constants/roles.constant'
 
 export const Route = createFileRoute('/')({
+  beforeLoad: ({ context }) => {
+    // Redirect to login if user is not logged in OR is a provider
+    if (!context.isLoggedin() || !context.checkRole(ROLES.USER)) {
+      throw redirect({
+        to: '/login',
+      });
+    }
+  },
   component: Index,
 })
 
