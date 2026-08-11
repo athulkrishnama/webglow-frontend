@@ -1,12 +1,32 @@
-
 import { useFormContext } from "react-hook-form";
 import type { CreateProviderServiceFormData } from "../../schemas/provider-service.schema";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { MapPin } from "lucide-react";
+import { InteractiveMap } from "./interactive-map";
 
 export function LocationSection() {
-  const { register } = useFormContext<CreateProviderServiceFormData>();
+  const { register, setValue } = useFormContext<CreateProviderServiceFormData>();
+
+  const handleLocationSelect = (location: {
+    lat: number;
+    lng: number;
+    address?: string;
+    city?: string;
+    state?: string;
+    zipCode?: string;
+  }) => {
+    // Update coordinates
+    setValue("location.coordinates.0", location.lng, { shouldValidate: true });
+    setValue("location.coordinates.1", location.lat, { shouldValidate: true });
+    
+    // Auto-fill other fields if provided from reverse geocoding
+    if (location.address) setValue("location.address", location.address, { shouldDirty: true });
+    if (location.city) setValue("location.city", location.city, { shouldDirty: true });
+    if (location.state) setValue("location.state", location.state, { shouldDirty: true });
+    if (location.zipCode) setValue("location.zipCode", location.zipCode, { shouldDirty: true });
+  };
+
 
   return (
     <div className="space-y-6">
@@ -14,11 +34,14 @@ export function LocationSection() {
         <MapPin className="w-5 h-5 text-blue-400" />
         <div>
           <h3 className="text-lg font-medium text-foreground mb-1">Location</h3>
-        <p className="text-sm text-muted-foreground mb-4">
-            Where is your service based?
+          <p className="text-sm text-muted-foreground">
+            Where is your service based? Search or drop a pin on the map.
           </p>
         </div>
       </div>
+
+      {/* Interactive Map */}
+      <InteractiveMap onLocationSelect={handleLocationSelect} />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2 md:col-span-2">

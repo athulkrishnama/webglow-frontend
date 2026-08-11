@@ -2,7 +2,6 @@ import {
   useForm,
   FormProvider,
   type SubmitHandler,
-  type Resolver,
 } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -28,9 +27,7 @@ export function CreateServiceForm() {
   } = useCreateProviderService();
 
   const methods = useForm<CreateProviderServiceFormData>({
-    resolver: zodResolver(
-      CreateProviderServiceSchema,
-    ) as unknown as Resolver<CreateProviderServiceFormData>,
+    resolver: zodResolver(CreateProviderServiceSchema),
     defaultValues: {
       title: "",
       category: "",
