@@ -8,11 +8,9 @@ const storage = {
     return Promise.resolve(value);
   },
   setItem: (key: string, value: string) => {
-    console.log(`[redux-persist] setItem: ${key}`, value);
     return Promise.resolve(window.localStorage.setItem(key, value));
   },
   removeItem: (key: string) => {
-    console.log(`[redux-persist] removeItem: ${key}`);
     return Promise.resolve(window.localStorage.removeItem(key));
   },
 };
