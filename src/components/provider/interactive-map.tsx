@@ -45,7 +45,7 @@ function MapClickHandler({
   setIsGeocoding: (val: boolean) => void;
 }) {
   const map = useMapEvents({
-    click: async (e) => {
+    click: async (e: L.LeafletMouseEvent) => {
       const newPos: [number, number] = [e.latlng.lat, e.latlng.lng];
       setPosition(newPos);
       await reverseGeocode(newPos, onLocationSelect, setIsGeocoding);
